@@ -3,7 +3,7 @@ import os
 from flask import request, jsonify, Response, stream_with_context, json
 import requests
 import sseclient
-from app.services import openai_service, pinecone_service, scraping_service
+from app.services import LLM_service, pinecone_service, scraping_service
 from app.utils.helper_functions import chunk_text, build_prompt, construct_messages_list
 
 PINECONE_INDEX_NAME = 'index237'
@@ -17,7 +17,7 @@ def handle_query():
     context_chunks = pinecone_service.get_most_similar_chunks_for_query(question, PINECONE_INDEX_NAME)
     
     # Build the payload to send to OpenAI
-    headers, data = openai_service.construct_llm_payload(question, context_chunks, chat_history)
+    headers, data = LLM_service.construct_llm_payload(question, context_chunks, chat_history)
 
     # Send to OpenAI's LLM to generate a completion
     def generate():

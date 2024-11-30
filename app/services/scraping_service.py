@@ -1,8 +1,11 @@
-import requests
-from bs4 import BeautifulSoup
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
 
-def scrape_website(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    text = soup.get_text(separator='\n')
-    return text
+
+def Pdf_handler(pdf_path):
+    loader = PyPDFLoader(pdf_path)
+    documents = loader.load()
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    texts = text_splitter.split_documents(documents)
+    return texts
