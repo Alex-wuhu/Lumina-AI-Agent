@@ -1,6 +1,12 @@
 # Utility functions like chunk_text, build_prompt, etc.
+from IPython.display import Image, display
+from app.services.LLM_service import GraphBuilder 
 
-PROMPT_LIMIT = 3750
+def Visualize_Graph():
+    print("in")
+    Graph = GraphBuilder()
+    print(Graph.get_graph().draw_mermaid())
+
 
 
 def build_prompt(query, context_chunks):
