@@ -32,7 +32,7 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
         WBNB_ADDRESS = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
 
         # 设置账户私钥
-        private_key = 'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
+        private_key = ''
         account = Account.from_key(private_key)
 
         # PancakeSwap Router ABI
