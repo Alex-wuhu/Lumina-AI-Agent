@@ -1,0 +1,17 @@
+.home{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(60, 60, 60, 100);
+}
+.content{
+    margin-top: 3vw;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: start;
+    padding: 0 6vw;
+    gap: 2vw;
+}
+.card{
+    
+}
