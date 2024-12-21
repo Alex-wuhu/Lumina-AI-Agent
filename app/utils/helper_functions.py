@@ -1,6 +1,6 @@
 # Utility functions like chunk_text, build_prompt, etc.
 from IPython.display import Image, display
-from app.services.LLM_service import GraphBuilder 
+#from app.services.LLM_service import GraphBuilder 
 
 def Visualize_Graph():
     print("in")

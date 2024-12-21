@@ -1,6 +1,12 @@
-from app.utils.helper_functions import Visualize_Graph
-from app.services.LLM_service import get_response
+from app.services.LLM_service import get_response,AgentBuilder
+from app.services.scraping_service import Markdown_hander
+from langchain import hub
 #Visualize_Graph()
-query = "what is the topic of this document"
+query = "I want to buy 1.5 bitcoint "
+#agent = AgentBuilder()
 
-print(get_response(query))
+
+
+#print(get_response(query))
+
+#prompt = hub.pull("alexyang/cryptoprompt") 
