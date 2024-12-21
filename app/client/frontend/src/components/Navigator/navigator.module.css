@@ -1,0 +1,61 @@
+.father {
+    display: flex;
+    align-items: center;
+    width: 98vw;
+    height: 10vh;
+    padding: 0 1vw;
+    background-color: rgba(31, 32, 32, 100);
+    color: whitesmoke;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    color: white;
+    min-width: 5vw;
+  }
+  .home {
+    display: flex;
+    align-items: center;
+    margin-left: 55vw;
+    color: white;
+    min-width: 5vw
+  }
+  .user {
+    display: flex;
+    align-items: center;
+    margin-left: 5vw;
+    color: white;
+    min-width: 5vw
+  }
+  .connect_wallet_button {
+    display: flex;
+    align-items: center;
+    margin-left: 5vw;
+    color: white;
+    text-decoration: none;
+    min-width: 5vw
+  }
+  .home_link{
+    color: white;
+    text-decoration: none;
+    font-size: large;
+  }
+  .user_link{
+    color: white;
+    text-decoration: none;
+    font-size: large
+  }
+  .DAO_name{
+    margin-left: 0.5vw;
+    min-width: 5vw
+  }
+.DAO_name_link{
+    color: white;
+    text-decoration: none;
+    font-size: large;
+}
+  .logo_image {
+    width: 4vw; /* 设置图片宽度 */
+    height: auto; /* 保持图片比例 */
+    border-radius: 100%;
+  }

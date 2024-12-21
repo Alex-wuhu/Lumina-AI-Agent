@@ -1,0 +1,109 @@
+/* deposit.module.css */
+.depositPage {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(60, 60, 60, 100);
+}
+
+.content {
+    margin-top: 3vw;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6vw;
+    gap: 2vw;
+    min-height: 90vh;
+
+}
+
+.card {
+    background-color: rgb(31, 32, 32);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 50vw;
+    min-height: 60vh;
+    
+}
+
+/* 代币质押部分的样式 */
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: whitesmoke;
+}
+
+.tokenInfo {
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
+    color: whitesmoke;
+}
+
+.stakeSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stakeInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.stakeButtons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.stakeButton, .unstakeButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.stakeButton {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.stakeButton:hover {
+    background-color: #45a049;
+}
+
+.unstakeButton {
+    background-color: #f44336;
+    color: white;
+}
+
+.unstakeButton:hover {
+    background-color: #e53935;
+}
+
+.status {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555;
+    text-align: center;
+}
+
+.cardContainer{
+    display: flex;
+    min-width: 50vw;
+    min-height: 60vh;
+    justify-content: center;
+    align-items: center;
+}
