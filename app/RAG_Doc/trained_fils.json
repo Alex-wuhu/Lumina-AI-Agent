@@ -1,8 +1,20 @@
 {
-    "Pdf_files":[
+    "Files":[
         {
-            "name":"BitcoinWhitePaper",
-            "path":"\\bitcoin.pdf"
+            "name":"BITCOIN_PRICE_PREDICTION_USING_MACHINE_LEARNING",
+            "path":"\\BITCOIN_PRICE_PREDICTION_USING_MACHINE_LEARNING.pdf"
+        },
+        {
+            "name":"Bitcoin_Price_Prediction_Using_Sentiment_Analysis",
+            "path":"\\Bitcoin_Price_Prediction_Using_Sentiment_Analysis.pdf"
+        },
+        {
+            "name":"Deciphering the Blockchain",
+            "path":"\\Deciphering the Blockchain.pdf"
+        },
+        {
+            "name":"Quantitative analysis of Crypto",
+            "path":"\\Quantitative analysis of Crypto.pdf"
         }
     ]
 }

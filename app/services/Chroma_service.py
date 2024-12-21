@@ -4,7 +4,7 @@ import json
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from uuid import uuid4
-from app.services.scraping_service import Pdf_handler
+from app.services.scraping_service import Pdf_handler,Markdown_hander
 EMBEDDING_DIMENSION = 1536
 RAG_PATH = os.path.abspath(os.path.dirname(__file__) + "/../RAG_Doc/")
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
@@ -23,11 +23,14 @@ def local_Rag():
    print(trained_files)
    with open(trained_files) as file:
        files_json = json.load(file)
-       for i in files_json["Pdf_files"]:
+       for i in files_json["Files"]:
            print(i)
            print("trained resouce : "+i["name"])
            print("path : "+RAG_PATH+i["path"])
-           cur_doc = Pdf_handler(RAG_PATH+i["path"])
+           if("md" in i):
+            cur_doc = Markdown_hander(RAG_PATH+i["path"])
+           else:
+            cur_doc = Pdf_handler(RAG_PATH+i["path"])
            embed_chunks_and_upload_to_Chroma(cur_doc)
    print("train finished")        
    
