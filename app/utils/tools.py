@@ -51,14 +51,19 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
         w3 = Web3(Web3.HTTPProvider('https://data-seed-prebsc-1-s1.binance.org:8545'))
 
         # 合约地址
-        OWNER_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-        BACKEND_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-        PANCAKE_ROUTER = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3"
-        WBNB_ADDRESS = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+        OWNER_ADDRESS = Web3.to_checksum_address("0x0aa156eebbe3a8921492491c3829444024502c9b")
+        BACKEND_ADDRESS = Web3.to_checksum_address("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+        PANCAKE_ROUTER = Web3.to_checksum_address("0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3")
+        WBNB_ADDRESS = Web3.to_checksum_address("0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd")
 
         # 设置账户私钥
         private_key = ''
         account = Account.from_key(private_key)
+        print(f"Account address: {account.address}")  # 打印账户地址
+        
+        # 检查账户余额
+        balance = w3.eth.get_balance(account.address)
+        print(f"Account balance: {w3.from_wei(balance, 'ether')} BNB")
 
         # PancakeSwap Router ABI
         router_abi = [
@@ -112,22 +117,23 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
 
         # 根据交易类型准备交易
         if trade_type == 'ETH_TO_TOKEN':
-            path = [WBNB_ADDRESS, output_token]
+            path = [WBNB_ADDRESS, Web3.to_checksum_address(output_token)]
             transaction = contract.functions.swapExactETHForTokens(
                 amount_out_min,
                 path,
                 OWNER_ADDRESS,  # 接收代币的地址
                 deadline
             ).build_transaction({
-                'from': BACKEND_ADDRESS,
+                'chainId': 97,  # BSC 测试网的 chainId
+                'from': account.address,
                 'value': amount_in,  # 发送的 ETH 数量
                 'gas': 2000000,
                 'gasPrice': w3.eth.gas_price,
-                'nonce': w3.eth.get_transaction_count(BACKEND_ADDRESS),
+                'nonce': w3.eth.get_transaction_count(account.address),
             })
 
         elif trade_type == 'TOKEN_TO_ETH':
-            path = [input_token, WBNB_ADDRESS]
+            path = [Web3.to_checksum_address(input_token), WBNB_ADDRESS]
             transaction = contract.functions.swapExactTokensForETH(
                 amount_in,
                 amount_out_min,
@@ -135,14 +141,15 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
                 OWNER_ADDRESS,  # 接收 ETH 的地址
                 deadline
             ).build_transaction({
-                'from': BACKEND_ADDRESS,
+                'chainId': 97,  # BSC 测试网的 chainId
+                'from': account.address,
                 'gas': 2000000,
                 'gasPrice': w3.eth.gas_price,
-                'nonce': w3.eth.get_transaction_count(BACKEND_ADDRESS),
+                'nonce': w3.eth.get_transaction_count(account.address),
             })
 
         elif trade_type == 'TOKEN_TO_TOKEN':
-            path = [input_token, output_token]
+            path = [Web3.to_checksum_address(input_token), Web3.to_checksum_address(output_token)]
             transaction = contract.functions.swapExactTokensForTokens(
                 amount_in,
                 amount_out_min,
@@ -150,16 +157,17 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
                 OWNER_ADDRESS,  # 接收代币的地址
                 deadline
             ).build_transaction({
-                'from': BACKEND_ADDRESS,
+                'chainId': 97,  # BSC 测试网的 chainId
+                'from': account.address,
                 'gas': 2000000,
                 'gasPrice': w3.eth.gas_price,
-                'nonce': w3.eth.get_transaction_count(BACKEND_ADDRESS),
+                'nonce': w3.eth.get_transaction_count(account.address),
             })
         else:
             return f"Invalid trade type: {trade_type}"
 
         # 签名并发送交易
-        signed_txn = w3.eth.account.sign_transaction(transaction, private_key)
+        signed_txn = Account.sign_transaction(transaction, private_key)
         tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
 
         # 等待交易收据
