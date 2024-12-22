@@ -1,24 +1,49 @@
 from langchain.tools.retriever import create_retriever_tool
 from app.services.Chroma_service import get_chroma_vector_store,local_Rag
 from langchain.tools import tool
+from app.utils.quantitative import query_eth_indicators
 from web3 import Web3
 from eth_account import Account
 import time
 
 
 def GetTools():
-
-    vector_store = get_chroma_vector_store()
-    retriever = vector_store.as_retriever()
-    
-    retriever_tool = create_retriever_tool(
-        retriever,
-        "Bitcoin Quantitative analysis retriever",
-        "Search for information about Bitcoin Quantitative analysis. For any questions about Quantitative analysis Bitcoin, you can use this tool",
-    )
-    tools = [retriever_tool,BuyCryptos]
+    tools = [buyETH]
     return tools
 
+@tool
+def buyETH(amount:int) ->str:
+    """tools for buy and sell ETH"""
+    print( f"{amount} accept")
+    return f"{amount} done sucess"
+
+@tool
+def retrieve(query: str) -> str:
+    """Retrieve information related to Quantitative analysis and crypto trading from our knowledge base."""
+    # Create a retriever tool with the vector store
+    vector_store = get_chroma_vector_store()
+    retriever = vector_store.as_retriever(
+        search_type="similarity",
+        search_kwargs={"k": 3}
+    )
+    
+    # Get relevant documents
+    docs = retriever.get_relevant_documents(query)
+    
+    # Format the response
+    response = []
+    for doc in docs:
+        response.append(f"Source: {doc.metadata}")
+        response.append(f"Content: {doc.page_content}")
+        response.append("---")
+    
+    return "\n".join(response)
+
+@tool
+def GetEthIndicators() -> dict:
+    """Query current ETH price indicators including last price, VWAP and RSI. Only call this once."""
+    indicators = query_eth_indicators()
+    return indicators
 
 def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: float) -> str:
     try:
