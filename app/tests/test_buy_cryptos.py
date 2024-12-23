@@ -9,10 +9,10 @@ def test_eth_to_token():
         
         # 测试参数
         trade_type = "ETH_TO_TOKEN"
-        input_token = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"  # WBNB地址
+        input_token = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"  # WBNB地址  ETH
         # BUSD测试网地址
-        output_token = "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee"  
-        amount = 0.01  # 用0.01 BNB测试
+        output_token = "0xeD24FC36d5Ee211Ea25A80239Fb84Cfd80f12Ee"  
+        amount = 0.01  # 用0.01 BNB测试C
 
         print("\n=== 测试用BNB购买代币 ===")
         print(f"交易类型: {trade_type}")
@@ -33,15 +33,15 @@ def test_eth_to_token():
         print(f"测试失败: {str(e)}")
 
 def test_token_to_eth():
-    """测试将代币换回BNB"""
+    """TBNB TO ETH"""
     try:
         from app.utils.tools import BuyCryptos
         
         # 测试参数
         trade_type = "TOKEN_TO_ETH"
         # BUSD测试网地址
-        input_token = "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee"
-        output_token = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"  # WBNB地址
+        input_token = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+        output_token = "0x0841e381a6363e6e7fbd742407b5749fc5e73083"  # WBNB地址
         amount = 0.01  # 卖出0.01个代币
 
         print("\n=== 测试代币卖回BNB ===")
@@ -93,6 +93,4 @@ def test_token_to_token():
 
 if __name__ == "__main__":
     print("开始测试智能合约交互...")
-    test_eth_to_token()
     test_token_to_eth()
-    test_token_to_token()

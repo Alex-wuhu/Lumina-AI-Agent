@@ -8,13 +8,23 @@ import time
 
 
 def GetTools():
-    tools = [buyETH]
+    tools = [BuyCryptos]
     return tools
 
 @tool
-def buyETH(amount:int) ->str:
-    """tools for buy and sell ETH"""
-    print( f"{amount} accept")
+def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: float) ->str:
+    """
+    tools for buy and sell Cryptos
+    trade_type : ETH_TO_TOKEN  or TOKEN_TO_ETH , for Buying ETH use TOKEN_TO_ETH , for selling ETH use ETH_TO_TOKEN
+    input_token : ETH or BNB
+    output_token: ETH or BNB
+    amount : specifi amount 
+    """
+    if input_token == "ETH":
+        input = "0xeD24FC36d5Ee211Ea25A80239Fb84Cfd80f12Ee"
+
+
+    print( f"{trade_type} {input_token} {output_token} accept")
     return f"{amount} done sucess"
 
 @tool
@@ -51,13 +61,13 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
         w3 = Web3(Web3.HTTPProvider('https://data-seed-prebsc-1-s1.binance.org:8545'))
 
         # 合约地址
-        OWNER_ADDRESS = Web3.to_checksum_address("0x0aa156eebbe3a8921492491c3829444024502c9b")
+        OWNER_ADDRESS = Web3.to_checksum_address("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
         BACKEND_ADDRESS = Web3.to_checksum_address("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
         PANCAKE_ROUTER = Web3.to_checksum_address("0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3")
         WBNB_ADDRESS = Web3.to_checksum_address("0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd")
 
         # 设置账户私钥
-        private_key = ''
+        private_key = 'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
         account = Account.from_key(private_key)
         print(f"Account address: {account.address}")  # 打印账户地址
         
@@ -114,7 +124,7 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
         amount_in = w3.to_wei(amount, 'ether')
         amount_out_min = w3.to_wei(amount * 0.99, 'ether')  # 1% 滑点
         deadline = int(time.time()) + 1800  # 30分钟后过期
-
+    
         # 根据交易类型准备交易
         if trade_type == 'ETH_TO_TOKEN':
             path = [WBNB_ADDRESS, Web3.to_checksum_address(output_token)]
@@ -132,8 +142,8 @@ def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
                 'nonce': w3.eth.get_transaction_count(account.address),
             })
 
-        elif trade_type == 'TOKEN_TO_ETH':
-            path = [Web3.to_checksum_address(input_token), WBNB_ADDRESS]
+        elif trade_type == 'TOKEN_TO_ETH':  
+            path = [input_token, output_token]
             transaction = contract.functions.swapExactTokensForETH(
                 amount_in,
                 amount_out_min,
