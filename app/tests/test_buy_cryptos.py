@@ -94,4 +94,3 @@ if __name__ == "__main__":
     test_deposit()
     test_bnb_to_token()
     test_token_to_bnb()
-    test_token_to_token()
