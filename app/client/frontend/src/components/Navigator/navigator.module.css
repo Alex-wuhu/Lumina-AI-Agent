@@ -16,7 +16,7 @@
   .home {
     display: flex;
     align-items: center;
-    margin-left: 53vw;
+    margin-left: 50vw;
     color: white;
     min-width: 5vw
   }
@@ -39,12 +39,12 @@
   }
   .DAO_name{
     margin-left: 0.5vw;
-    min-width: 7vw
+    min-width: 10vw
   }
 .DAO_name_link{
     color: white;
     text-decoration: none;
-    font-size: large;
+    font-size: 22px;
 }
   .logo_image {
     width: 4vw; /* …Ë÷√Õº∆¨øÌ∂» */
