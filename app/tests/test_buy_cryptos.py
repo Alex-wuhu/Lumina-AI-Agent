@@ -1,29 +1,13 @@
 import sys
 import os
+from web3 import Web3
 
 # 添加项目根目录到 Python 路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from app.utils.tools import BuyCryptos
+from app.utils.buyCryptos import BuyCryptos
 
-def test_deposit():
-    """测试存款功能"""
-    print("\n=== 测试存款功能 ===")
-    
-    # 创建交易实例
-    trade = BuyCryptos()
-    
-    # 存入 ETH
-    print("\n存入 ETH...")
-    result = trade.deposit_eth(0.01)
-    print(f"存款结果: {result}")
-    
-    # 存入代币
-    print("\n存入代币...")
-    result = trade.deposit_token("0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee", 0.01)
-    print(f"存款结果: {result}")
-
-def test_bnb_to_token():
+def test_1_bnb_to_token():
     """测试用BNB购买代币"""
     print("\n=== 测试用BNB购买代币 ===")
     
@@ -45,7 +29,7 @@ def test_bnb_to_token():
     result = trade.execute_trade()
     print(f"交易结果: {result}")
 
-def test_token_to_bnb():
+def test_2_token_to_bnb():
     """测试代币卖回BNB"""
     print("\n=== 测试代币卖回BNB ===")
     
@@ -53,7 +37,7 @@ def test_token_to_bnb():
     trade = BuyCryptos(
         trade_type="TOKEN_TO_ETH",
         input_token="0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee",  # BUSD
-        output_token="0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",  # WBNB
+        output_token="0xa1bd0b49b57141ffa0a3e94d4adf953716e28b1c",  # WBNB
         amount=0.001  # Token
     )
     
@@ -66,6 +50,20 @@ def test_token_to_bnb():
     # 执行交易
     result = trade.execute_trade()
     print(f"交易结果: {result}")
+
+def test_3_get_token_balance():
+    print("\n=== 测试查询代币余额 ===")
+    # 创建交易实例
+    trade = BuyCryptos(
+        trade_type="TOKEN_TO_ETH",
+        input_token="0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee",  # BUSD
+        output_token="0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",  # WBNB
+        amount=0.001  # Token
+    )
+    
+    # 查询 BUSD 代币余额
+    balance = trade.agent_contract.functions.getTokenBalance(trade.input_token).call({'from': trade.account.address})
+    print(f"账户 {trade.account.address} 的 BUSD 余额: {Web3.from_wei(balance, 'ether')} BUSD")
 
 def test_token_to_token():
     """测试代币互换"""
@@ -90,6 +88,7 @@ def test_token_to_token():
     print(f"交易结果: {result}")
 
 if __name__ == "__main__":
-    print("开始测试智能合约交互...")
-    test_bnb_to_token()
-    test_token_to_bnb()
+    print("开始测试智能合约交互...\n")
+    test_1_bnb_to_token()
+    test_2_token_to_bnb()
+    test_3_get_token_balance()
