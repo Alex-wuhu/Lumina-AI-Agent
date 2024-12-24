@@ -9,75 +9,481 @@ import { ethers } from "ethers"; // 导入 ethers.js V6
 // 合约地址和 ABI
 const contractAddress = "0x0aa156eebbe3a8921492491c3829444024502c9b"; // 替换为你的合约地址
 const contractABI = [
-  // depositETH
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "depositETH",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  // depositERC20
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "depositERC20",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  // Approve function for ERC20 tokens
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "spender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "approve",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_authorizedBackend",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_pancakeRouter",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_WBNB",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousBackend",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newBackend",
+				"type": "address"
+			}
+		],
+		"name": "AuthorizedBackendChanged",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newBalance",
+				"type": "uint256"
+			}
+		],
+		"name": "ETHBalanceUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newBalance",
+				"type": "uint256"
+			}
+		],
+		"name": "TokenBalanceUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"name": "TradeExecuted",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "WBNB",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "authorizedBackend",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "contractETHBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "depositERC20",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "depositETH",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getETHBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			}
+		],
+		"name": "getTokenBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "pancakeRouter",
+		"outputs": [
+			{
+				"internalType": "contract IPancakeRouter",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newBackend",
+				"type": "address"
+			}
+		],
+		"name": "setAuthorizedBackend",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapETHForTokens",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapTokensForETH",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountOutMin",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "path",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "swapTokensForTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userETHBalances",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userTokenBalances",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawERC20",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawETH",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	}
 ];
+
 // 初始化 provider（这里假设你使用 MetaMask）
 const provider = new ethers.BrowserProvider(window.ethereum);
 // 创建合约实例
-const contract = new ethers.Contract(contractAddress, contractABI, await provider.getSigner());
+const contract = new ethers.Contract(
+  contractAddress,
+  contractABI,
+  await provider.getSigner()
+);
 // 模拟代币数据
-const token = {
-  symbol: "UNI",
-  name: "Uniswap",
-  balance: 1000, // 假设用户有1000个UNI代币
+const tokenAddresses = {
+  ETH: "<USDT_ADDRESS>",
+  BUSD: "<BUSD_ADDRESS>",
 };
+
 
 const DepositPage = () => {
   const [amount, setAmount] = useState(0);
@@ -109,71 +515,78 @@ const DepositPage = () => {
     return contract;
   };
 
-  // 处理质押按钮点击
-  const handleStake = async () => {
-    const numericAmount = Number(inputValue);
-    if (numericAmount <= 0) {
-      setStakingStatus("请输入正确的质押数量");
-      return;
+ // 处理质押按钮点击
+const handleStake = async () => {
+  const numericAmount = Number(inputValue);
+
+  // 输入值验证
+  if (isNaN(numericAmount) || numericAmount <= 0) {
+    setStakingStatus("请输入正确的质押数量");
+    return;
+  }
+
+  setStakingStatus("正在质押...");
+
+  try {
+    // 获取 signer 对象
+    const signer = await provider.getSigner();
+
+    if (selectedToken === "BNB") {
+      await stakeBNB(inputValue, signer);
+    } else {
+      const tokenAddress = "<ERC20_TOKEN_ADDRESS>"; // 替换为目标 ERC-20 代币地址
+      await stakeERC20(inputValue, tokenAddress, signer);
     }
-    if (numericAmount > token.balance) {
-      setStakingStatus("余额不足");
-      return;
-    }
-    setStakingStatus("正在质押...");
-  
-    try {
-      // 获取 signer 对象
-      const signer = await provider.getSigner();
-  
-      if (selectedToken === "BNB") {
-        // 使用 depositETH 进行质押
-        console.log(ethers.parseEther(inputValue));
-        
-        try {
-          const tx = await contract.depositETH(
-            ethers.parseEther(inputValue), // 转换为 wei
-          );
-          
-          await tx.wait();
-        } catch (error) {
-          console.error("交易失败，错误信息：", error);
-          setStakingStatus("质押失败！");
-        }
-        
-        setStakingStatus("质押成功！");
-      } else {
-        // 使用 depositERC20 进行质押
-        const tokenAddress = "<ERC20_TOKEN_ADDRESS>"; // 替换为你要质押的 ERC-20 代币地址
-  
-        // 创建 ERC-20 代币合约实例
-        const tokenContract = new ethers.Contract(tokenAddress, [
-          "function approve(address spender, uint256 amount) public returns (bool)",
-        ], signer);
-  
-        // 创建质押合约实例
-        const agentContract = new ethers.Contract(contractAddress, [
-          "function depositERC20(address tokenAddress, uint256 amount) external", // 假设你有该函数
-        ], signer);
-  
-        // 授权合约转账代币
-        const amountInWei = ethers.parseEther(inputValue); // 代币质押数量
-        const approvalTx = await tokenContract.approve(contractAddress, amountInWei);
-        await approvalTx.wait();
-  
-        // 调用 depositERC20 方法进行质押
-        const depositTx = await agentContract.depositERC20(tokenAddress, amountInWei);
-        await depositTx.wait();
-  
-        setStakingStatus("质押成功！");
-      }
-    } catch (error) {
-      console.error("质押失败", error);
-      setStakingStatus("质押失败！");
-    }
-  };
-  
-  
+
+    setStakingStatus("质押成功！");
+  } catch (error) {
+    console.error("质押失败：", error);
+    setStakingStatus("质押失败！请检查输入并重试。");
+  }
+};
+
+// 处理 BNB 质押
+const stakeBNB = async (amount: any, signer: any) => {
+  try {
+    const tx = await contract.depositETH({
+      value:BigInt("1000") // 转换为 wei
+
+    });
+    await tx.wait();
+  } catch (error) {
+    throw new Error(`BNB 质押失败: ${error.message}`);
+  }
+};
+
+// 处理 ERC-20 代币质押
+const stakeERC20 = async (amount: any, tokenAddress: any, signer: any) => {
+  try {
+    const tokenContract = new ethers.Contract(
+      tokenAddress,
+      [
+        "function approve(address spender, uint256 amount) public returns (bool)",
+      ],
+      signer
+    );
+
+    const amountInWei = ethers.parseUnits(amount); // 转换为 wei
+    const contractAddress = "<STAKING_CONTRACT_ADDRESS>"; // 替换为质押合约地址
+
+    // 授权代币转账
+    const approvalTx = await tokenContract.approve(contractAddress, amountInWei);
+    await approvalTx.wait();
+
+    // 调用质押方法
+    const depositTx = await contract.depositERC20(
+      tokenAddress,
+      amountInWei
+    );
+    await depositTx.wait();
+  } catch (error) {
+    throw new Error(`ERC-20 质押失败: ${error.message}`);
+  }
+};
+
 
   // 处理取消质押按钮点击
   const handleUnstake = async () => {
@@ -255,7 +668,7 @@ const DepositPage = () => {
                       options={[
                         { value: "BNB", label: "BNB" },
                         { value: "ETH", label: "ETH" },
-                        { value: "USDT", label: "USDT" },
+                        { value: "BUSD", label: "BUSD" },
                       ]}
                       suffixIcon={<DownOutlined style={{ color: "white" }} />} // 自定义下拉箭头
                     />
@@ -263,13 +676,11 @@ const DepositPage = () => {
                 </div>
               </div>
               {/* 将 Button 替换为 div，并为其添加点击事件 */}
-              <div 
-                className={styles.stake_button} 
+              <div
+                className={styles.stake_button}
                 onClick={handleStake} // 处理点击事件
               >
-                <div className={styles.customButton}>
-                  Stake
-                </div>
+                <div className={styles.customButton}>Stake</div>
               </div>
             </div>
           </div>

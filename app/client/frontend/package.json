@@ -20,7 +20,8 @@
     "ethers": "^6.13.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.1.0"
+    "react-router-dom": "^7.1.0",
+    "solc": "^0.8.7-fixed"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
