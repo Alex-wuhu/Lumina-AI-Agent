@@ -9,7 +9,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: start;
-    padding: 0 6vw;
+    padding: 0 0 0 8vw;
     gap: 2vw;
 }
 .card{

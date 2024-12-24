@@ -1,8 +1,13 @@
+import styles from "./footer.module.css"
+
 function Footer() {
 
   return (
     <>
-      <div>
+      <div className={styles.footer}>
+       <div className={styles.content}>
+        <div className={styles.t}>Lumina DAO</div>
+       </div>
       </div>
     </>
   )

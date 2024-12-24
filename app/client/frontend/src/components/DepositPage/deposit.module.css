@@ -2,7 +2,11 @@
 .depositPage {
     display: flex;
     flex-direction: column;
-    background-color: rgba(60, 60, 60, 100);
+    /* background-color: rgba(60, 60, 60, 100); */
+    background: #ebbd92;
+    background: linear-gradient(90deg, #3f3f3f 0,#6c6262 58%);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
 }
 
 .content {
@@ -18,13 +22,15 @@
 }
 
 .card {
-    background-color: rgb(31, 32, 32);
+    display: flex;
+    background-color: rgb(34, 34, 34);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     min-width: 50vw;
     min-height: 60vh;
-    
+    flex-direction: column;
+    align-items: center;
 }
 
 /* 代币质押部分的样式 */
@@ -37,10 +43,10 @@
 }
 
 .tokenInfo {
-    margin-bottom: 20px;
     font-size: 16px;
     text-align: center;
     color: whitesmoke;
+    margin-left: 10vw;
 }
 
 .stakeSection {
@@ -106,4 +112,40 @@
     min-height: 60vh;
     justify-content: center;
     align-items: center;
+}
+
+.stake_content{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 5vh;
+    border:1px solid rgba(173, 173, 173, 0.1);
+    border-radius: 1%;
+    min-height: 20vh;
+    min-width: 45vw;
+}
+.stake_button{
+    margin-top: 5vh;
+}
+.customButton {
+    font-size: 20px; 
+    padding: 15px 30px; /* 增大按钮的内边距 */
+    background: linear-gradient(90deg, #3f3f3f 0,#6c6262 58%);
+    border: none; /* 去掉默认边框 */
+    color: rgba(255, 255, 255, 0.811); /* 设置字体颜色为白色 */
+    border-radius: 5px; /* 设置按钮圆角 */
+    min-width: 30vw;
+    min-height: 10vh;
+    text-align: center; /* 确保文本水平居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* 鼠标悬浮时显示指针 */
+    transition: all 0.3s ease; /* 添加过渡效果 */
+  }
+
+  
+.customButton:hover{
+    background: linear-gradient(90deg, #3f3f3f 0,#6c6262 58%);
+    color: white;
 }
