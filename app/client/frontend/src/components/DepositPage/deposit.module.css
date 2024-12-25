@@ -23,7 +23,7 @@
 
 .card {
     display: flex;
-    background-color: rgb(34, 34, 34);
+    background-color: rgb(34, 34, 34,0.8);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -55,49 +55,7 @@
     align-items: center;
 }
 
-.stakeInput {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-align: center;
-    background-color: #f9f9f9;
-}
 
-.stakeButtons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.stakeButton, .unstakeButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.stakeButton {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.stakeButton:hover {
-    background-color: #45a049;
-}
-
-.unstakeButton {
-    background-color: #f44336;
-    color: white;
-}
-
-.unstakeButton:hover {
-    background-color: #e53935;
-}
 
 .status {
     margin-top: 20px;
@@ -126,16 +84,29 @@
 }
 .stake_button{
     margin-top: 5vh;
+    background: rgba(34, 34, 34, 0.5); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* Apply the blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    border-radius: 8px; /* Optional: Rounded corners for the frosted glass effect */
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow to enhance the frosted effect */
+    transition: backdrop-filter 0.3s ease; /* Smooth transition when hovering */
 }
+
+.stake_button:hover {
+    backdrop-filter: blur(20px); /* Increase blur on hover */
+    -webkit-backdrop-filter: blur(20px); /* Safari support */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Optional: Shadow effect on hover */
+  }
 .customButton {
     font-size: 20px; 
     padding: 15px 30px; /* 增大按钮的内边距 */
-    background: linear-gradient(90deg, #3f3f3f 0,#6c6262 58%);
+
     border: none; /* 去掉默认边框 */
     color: rgba(255, 255, 255, 0.811); /* 设置字体颜色为白色 */
     border-radius: 5px; /* 设置按钮圆角 */
-    min-width: 30vw;
-    min-height: 10vh;
+    min-width: 20vw;
+    min-height: 5vh;
     text-align: center; /* 确保文本水平居中 */
     display: flex;
     justify-content: center;
@@ -146,6 +117,5 @@
 
   
 .customButton:hover{
-    background: linear-gradient(90deg, #3f3f3f 0,#6c6262 58%);
     color: white;
 }

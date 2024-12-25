@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
 import Navigator from "../Navigator/Navigator";
 import Footer from "../Footer/Footer";
-import styles from "./deposit.module.css";
 import { Select, Space, ConfigProvider, Input } from "antd";
 import { DownOutlined } from "@ant-design/icons"; // 导入箭头图标
 import { ethers } from "ethers"; // 导入 ethers.js V6
+import React, { useState, useEffect, useRef } from "react";
+import NET from "vanta/dist/vanta.net.min";
+import styles from "./deposit.module.css";
+
 
 // 合约地址和 ABI
 const contractAddress = "0x0aa156eebbe3a8921492491c3829444024502c9b"; // 替换为你的合约地址
@@ -611,7 +613,26 @@ const stakeERC20 = async (amount: any, tokenAddress: any, signer: any) => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [inputValue]);
-
+  const [vantaEffect, setVantaEffect] = useState(null);
+  const myRef = useRef(null);
+  useEffect(() => {
+	if (!vantaEffect) {
+	  setVantaEffect(
+		NET({
+		  el: myRef.current,
+		  color: 0x1E90FF, // Set the color (use hex or RGB)
+		  backgroundColor: '#3c3c3c', // Optional: Set the background color
+		  points: 10, // Optional: Adjust the number of points
+		  maxDistance: 20, // Optional: Adjust the distance
+		  mouseControls: false, // Disable mouse interaction
+		  touchControls: false, // Disable touch interaction (if needed)
+		})
+	  );
+	}
+	return () => {
+	  if (vantaEffect) vantaEffect.destroy();
+	};
+  }, [vantaEffect]);
   return (
     <ConfigProvider
       theme={{
@@ -619,26 +640,26 @@ const stakeERC20 = async (amount: any, tokenAddress: any, signer: any) => {
           Select: {
             activeBorderColor: "rgba(173, 173, 173, 0.5)",
             hoverBorderColor: "rgba(173, 173, 173, 0.5)",
-            selectorBg: "rgb(34, 34, 34)",
+            selectorBg: "rgba(34, 34, 34,0.5)",
             colorTextPlaceholder: "white",
-            multipleItemBg: "rgb(34, 34, 34)",
+            multipleItemBg: "rgba(34, 34, 34,0.5)",
             optionActiveBg: "rgb(60,60,60)",
             optionSelectedBg: "rgb(60,60,60)",
             colorText: "white",
-            colorBgElevated: "rgb(34, 34, 34)",
+            colorBgElevated: "rgba(34, 34, 34,0.5)",
             colorBorder: "rgba(173, 173, 173, 0.5)",
           },
           Input: {
-            colorBorder: "rgb(34, 34, 34)",
-            hoverBorderColor: "rgb(34, 34, 34)",
-            activeBorderColor: "rgb(34, 34, 34)",
-            colorBgContainer: "rgb(34, 34, 34)",
+            colorBorder: "rgba(34, 34, 34,0)",
+            hoverBorderColor: "rgba(34, 34, 34,0)",
+            activeBorderColor: "rgba(34, 34, 34,0)",
+            colorBgContainer: "rgba(34, 34, 34,0)",
             inputFontSize: 40,
           },
         },
       }}
     >
-      <div className={styles.depositPage}>
+      <div className={styles.depositPage} ref={myRef}>
         <Navigator />
         <div className={styles.content}>
           <div className={styles.cardContainer}>
@@ -675,10 +696,9 @@ const stakeERC20 = async (amount: any, tokenAddress: any, signer: any) => {
                   </Space>
                 </div>
               </div>
-              {/* 将 Button 替换为 div，并为其添加点击事件 */}
               <div
                 className={styles.stake_button}
-                onClick={handleStake} // 处理点击事件
+                onClick={handleStake} 
               >
                 <div className={styles.customButton}>Stake</div>
               </div>

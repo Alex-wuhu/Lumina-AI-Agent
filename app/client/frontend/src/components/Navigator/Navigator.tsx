@@ -77,9 +77,14 @@ function Navigator() {
             Lumina DAO
           </Link>
         </div>
-        <div className={styles.home}>
-          <Link to="/" className={styles.home_link}>
-            Home
+        <div className={styles.market}>
+          <Link to="/market" className={styles.market_link}>
+            Market
+          </Link>
+        </div>
+        <div className={styles.deploy}>
+          <Link to="/deploy" className={styles.deploy_link}>
+            Deploy
           </Link>
         </div>
         <div className={styles.user}>
