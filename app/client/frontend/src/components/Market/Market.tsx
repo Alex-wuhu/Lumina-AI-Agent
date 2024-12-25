@@ -24,7 +24,7 @@ function Home() {
         NET({
           el: myRef.current,
           color: 0x1E90FF, // Set the color (use hex or RGB)
-          backgroundColor: '#3c3c3c', // Optional: Set the background color
+          backgroundColor: '#2a2a2a', // Optional: Set the background color
           points: 10, // Optional: Adjust the number of points
           maxDistance: 20, // Optional: Adjust the distance
           mouseControls: false, // Disable mouse interaction
