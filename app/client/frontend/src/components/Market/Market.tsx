@@ -7,14 +7,14 @@ import styles from "./market.module.css";
 
 function Home() {
   const images = [
-    "../../public/img/AI.png",
-    "../../public/img/AI2.png",
-    "../../public/img/AI3.png",
-    "../../public/img/AI4.png",
-    "../../public/img/AI5.png",
-    "../../public/img/AI6.png",
-    "../../public/img/AI7.png",
-    "../../public/img/AI8.png",
+    "/img/AI.png",
+    "/img/AI2.png",
+    "/img/AI3.png",
+    "/img/AI4.png",
+    "/img/AI5.png",
+    "/img/AI6.png",
+    "/img/AI7.png",
+    "/img/AI8.png",
   ];
   const [vantaEffect, setVantaEffect] = useState(null);
   const myRef = useRef(null);
