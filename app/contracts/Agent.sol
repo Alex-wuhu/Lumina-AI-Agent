@@ -31,15 +31,15 @@ interface IPancakeRouter {
 
 contract Agent {
     address public owner;
-    address public authorizedBackend; // ºó¶ËµØÖ·£¬ÓÃÓÚÖ´ĞĞÁ¿»¯½»Ò×
+    address public authorizedBackend; // åç«¯åœ°å€ï¼Œç”¨äºæ‰§è¡Œé‡åŒ–äº¤æ˜“
     IPancakeRouter public pancakeRouter;
     address public WBNB;
 
     uint256 public contractETHBalance;
 
-    // ¼ÇÂ¼Ã¿¸öÓÃ»§µÄ ETH ºÍ ERC20 ´ú±ÒÓà¶î
-    mapping(address => uint256) public userETHBalances; // ÓÃ»§µØÖ· => ETHÓà¶î
-    mapping(address => mapping(address => uint256)) public userTokenBalances; // ÓÃ»§µØÖ· => ´ú±ÒµØÖ· => Óà¶î
+    // è®°å½•æ¯ä¸ªç”¨æˆ·çš„ ETH å’Œ ERC20 ä»£å¸ä½™é¢
+    mapping(address => uint256) public userETHBalances; // ç”¨æˆ·åœ°å€ => ETHä½™é¢
+    mapping(address => mapping(address => uint256)) public userTokenBalances; // ç”¨æˆ·åœ°å€ => ä»£å¸åœ°å€ => ä½™é¢
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not the contract owner");
@@ -84,14 +84,14 @@ contract Agent {
         WBNB = _WBNB;
     }
 
-    // ×ªÒÆºÏÔ¼ËùÓĞÈ¨
+    // è½¬ç§»åˆçº¦æ‰€æœ‰æƒ
     function transferOwnership(address newOwner) external onlyOwner {
         require(newOwner != address(0), "New owner is the zero address");
         emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;
     }
 
-    // ĞŞ¸Äºó¶ËÊÚÈ¨µØÖ·
+    // ä¿®æ”¹åç«¯æˆæƒåœ°å€
     function setAuthorizedBackend(address newBackend) external onlyOwner {
         require(
             newBackend != address(0),
@@ -101,20 +101,20 @@ contract Agent {
         authorizedBackend = newBackend;
     }
 
-    // ´æÈë ETH
+    // å­˜å…¥ ETH
     function depositETH() external payable {
         require(msg.value > 0, "Amount must be greater than zero");
         contractETHBalance += msg.value;
-        userETHBalances[msg.sender] += msg.value; // ¸üĞÂÓÃ»§µÄETHÓà¶î
+        userETHBalances[msg.sender] += msg.value; // æ›´æ–°ç”¨æˆ·çš„ETHä½™é¢
 
         emit ETHBalanceUpdated(msg.sender, userETHBalances[msg.sender]);
     }
 
-    // ´æÈë ERC20 ´ú±Ò
+    // å­˜å…¥ ERC20 ä»£å¸
     function depositERC20(address tokenAddress, uint256 amount) external {
         require(amount > 0, "Amount must be greater than zero");
         IERC20 token = IERC20(tokenAddress);
-        // È·±£ÓÃ»§ÒÑ¾­Åú×¼ÁË´ú±Ò×ªÕË
+        // ç¡®ä¿ç”¨æˆ·å·²ç»æ‰¹å‡†äº†ä»£å¸è½¬è´¦
         token.transferFrom(msg.sender, address(this), amount);
         userTokenBalances[msg.sender][tokenAddress] += amount;
 
@@ -125,40 +125,40 @@ contract Agent {
         );
     }
 
-    // ÌáÈ¡ ETH
+    // æå– ETH
     function withdrawETH(uint256 _amount) external {
-        // ¼ì²éÓÃ»§Óà¶îÊÇ·ñ×ã¹»
+        // æ£€æŸ¥ç”¨æˆ·ä½™é¢æ˜¯å¦è¶³å¤Ÿ
         require(
             _amount > 0 && _amount <= userETHBalances[msg.sender],
             "Invalid withdrawal amount"
         );
 
-        // ¸üĞÂÓÃ»§Óà¶îºÍºÏÔ¼Óà¶î
+        // æ›´æ–°ç”¨æˆ·ä½™é¢å’Œåˆçº¦ä½™é¢
         userETHBalances[msg.sender] -= _amount;
         contractETHBalance -= _amount;
 
-        // Ö´ĞĞ×ªÕË
+        // æ‰§è¡Œè½¬è´¦
         payable(msg.sender).transfer(_amount);
 
-        // ´¥·¢ÊÂ¼ş
+        // è§¦å‘äº‹ä»¶
         emit ETHBalanceUpdated(msg.sender, userETHBalances[msg.sender]);
     }
 
-    // ÌáÈ¡ ERC20 ´ú±Ò
+    // æå– ERC20 ä»£å¸
     function withdrawERC20(address tokenAddress, uint256 amount) external {
-        // ¼ì²éÓÃ»§µÄ´ú±ÒÓà¶îÊÇ·ñ×ã¹»
+        // æ£€æŸ¥ç”¨æˆ·çš„ä»£å¸ä½™é¢æ˜¯å¦è¶³å¤Ÿ
         require(
             userTokenBalances[msg.sender][tokenAddress] >= amount,
             "Insufficient balance"
         );
 
-        // ¸üĞÂÓÃ»§µÄ´ú±ÒÓà¶î
+        // æ›´æ–°ç”¨æˆ·çš„ä»£å¸ä½™é¢
         userTokenBalances[msg.sender][tokenAddress] -= amount;
 
-        // Ö´ĞĞ×ªÕË
+        // æ‰§è¡Œè½¬è´¦
         IERC20(tokenAddress).transfer(msg.sender, amount);
 
-        // ´¥·¢ÊÂ¼ş
+        // è§¦å‘äº‹ä»¶
         emit TokenBalanceUpdated(
             msg.sender,
             tokenAddress,
@@ -166,27 +166,27 @@ contract Agent {
         );
     }
 
-    // Ö´ĞĞ½»Ò×£ºETH -> Token£¨ÓÉºÏÔ¼µ÷ÓÃ Uniswap ²¢¸üĞÂµ½Ö¸¶¨ÓÃ»§£©
+    // æ‰§è¡Œäº¤æ˜“ï¼šETH -> Tokenï¼ˆç”±åˆçº¦è°ƒç”¨ Uniswap å¹¶æ›´æ–°åˆ°æŒ‡å®šç”¨æˆ·ï¼‰
     function swapETHForTokens(
-        address user, // ½»Ò×¶ÔÓ¦µÄÓÃ»§
+        address user, // äº¤æ˜“å¯¹åº”çš„ç”¨æˆ·
         uint256 amountOutMin,
         address[] calldata path,
         uint256 deadline
     ) external payable onlyAuthorizedBackend {
         require(user != address(0), "Invalid user address");
         require(path[0] == WBNB, "Path must start with WBNB");
-        require(userETHBalances[user] >= msg.value, "Insufficient ETH balance"); // È·±£ÓÃ»§ÓĞ×ã¹»µÄETHÓà¶î
+        require(userETHBalances[user] >= msg.value, "Insufficient ETH balance"); // ç¡®ä¿ç”¨æˆ·æœ‰è¶³å¤Ÿçš„ETHä½™é¢
 
-        // µ÷ÓÃ Uniswap ½øĞĞ½»Ò×
+        // è°ƒç”¨ Uniswap è¿›è¡Œäº¤æ˜“
         uint256[] memory amounts = pancakeRouter.swapExactETHForTokens{
             value: msg.value
         }(amountOutMin, path, address(this), deadline);
 
-        // ¸üĞÂÓÃ»§µÄ ETH Óà¶î
+        // æ›´æ–°ç”¨æˆ·çš„ ETH ä½™é¢
         userETHBalances[user] -= msg.value;
         contractETHBalance -= msg.value;
 
-        // ¸üĞÂÓÃ»§µÄ Token Óà¶î
+        // æ›´æ–°ç”¨æˆ·çš„ Token ä½™é¢
         address tokenAddress = path[path.length - 1];
         uint256 tokenAmount = amounts[amounts.length - 1];
         userTokenBalances[user][tokenAddress] += tokenAmount;
@@ -200,9 +200,9 @@ contract Agent {
         );
     }
 
-    // Ö´ĞĞ½»Ò×£ºToken -> ETH£¨ÓÉºÏÔ¼µ÷ÓÃ Uniswap ²¢¸üĞÂµ½Ö¸¶¨ÓÃ»§£©
+    // æ‰§è¡Œäº¤æ˜“ï¼šToken -> ETHï¼ˆç”±åˆçº¦è°ƒç”¨ Uniswap å¹¶æ›´æ–°åˆ°æŒ‡å®šç”¨æˆ·ï¼‰
     function swapTokensForETH(
-        address user, // ½»Ò×¶ÔÓ¦µÄÓÃ»§
+        address user, // äº¤æ˜“å¯¹åº”çš„ç”¨æˆ·
         uint256 amountIn,
         uint256 amountOutMin,
         address[] calldata path,
@@ -215,10 +215,10 @@ contract Agent {
             "Insufficient token balance"
         );
 
-        // ÊÚÈ¨ Uniswap ´ú±Ò¶î¶È
+        // æˆæƒ Uniswap ä»£å¸é¢åº¦
         IERC20(path[0]).approve(address(pancakeRouter), amountIn);
 
-        // µ÷ÓÃ Uniswap ½øĞĞ½»Ò×
+        // è°ƒç”¨ Uniswap è¿›è¡Œäº¤æ˜“
         uint256[] memory amounts = pancakeRouter.swapExactTokensForETH(
             amountIn,
             amountOutMin,
@@ -227,8 +227,8 @@ contract Agent {
             deadline
         );
 
-        // ½»Ò×³É¹¦ºó¸üĞÂÓà¶î
-        uint256 ethAmount = amounts[amounts.length - 1]; // »ñµÃµÄ ETH ÊıÁ¿
+        // äº¤æ˜“æˆåŠŸåæ›´æ–°ä½™é¢
+        uint256 ethAmount = amounts[amounts.length - 1]; // è·å¾—çš„ ETH æ•°é‡
         userETHBalances[user] += ethAmount;
         contractETHBalance += ethAmount;
         userTokenBalances[user][path[0]] -= amountIn;
@@ -242,9 +242,9 @@ contract Agent {
         emit ETHBalanceUpdated(user, userETHBalances[user]);
     }
 
-    // Ö´ĞĞ½»Ò×£ºToken -> Token£¨ÓÉºÏÔ¼µ÷ÓÃ Uniswap ²¢¸üĞÂµ½Ö¸¶¨ÓÃ»§£©
+    // æ‰§è¡Œäº¤æ˜“ï¼šToken -> Tokenï¼ˆç”±åˆçº¦è°ƒç”¨ Uniswap å¹¶æ›´æ–°åˆ°æŒ‡å®šç”¨æˆ·ï¼‰
     function swapTokensForTokens(
-        address user, // ½»Ò×¶ÔÓ¦µÄÓÃ»§
+        address user, // äº¤æ˜“å¯¹åº”çš„ç”¨æˆ·
         uint256 amountIn,
         uint256 amountOutMin,
         address[] calldata path,
@@ -256,7 +256,7 @@ contract Agent {
             "Insufficient token balance"
         );
 
-        // ÊÚÈ¨ Uniswap ´ú±Ò¶î¶È²¢µ÷ÓÃ½»Ò×
+        // æˆæƒ Uniswap ä»£å¸é¢åº¦å¹¶è°ƒç”¨äº¤æ˜“
         IERC20(path[0]).approve(address(pancakeRouter), amountIn);
         uint256[] memory amounts = pancakeRouter.swapExactTokensForTokens(
             amountIn,
@@ -266,12 +266,12 @@ contract Agent {
             deadline
         );
 
-        // ¸üĞÂÓÃ»§µÄÄ¿±ê Token Óà¶î
+        // æ›´æ–°ç”¨æˆ·çš„ç›®æ ‡ Token ä½™é¢
         uint256 tokenAmount = amounts[amounts.length - 1];
         address targetToken = path[path.length - 1];
         userTokenBalances[user][targetToken] += tokenAmount;
 
-        // ¸üĞÂÓÃ»§µÄÔ´ Token Óà¶î
+        // æ›´æ–°ç”¨æˆ·çš„æº Token ä½™é¢
         userTokenBalances[user][path[0]] -= amountIn;
 
         emit TradeExecuted(user, amountIn, path, amounts);
@@ -287,18 +287,18 @@ contract Agent {
         );
     }
 
-    // ²éÑ¯ Token Óà¶î
+    // æŸ¥è¯¢ Token ä½™é¢
     function getTokenBalance(
         address tokenAddress
     ) external view returns (uint256) {
         return userTokenBalances[msg.sender][tokenAddress];
     }
 
-    // ²éÑ¯ ETH Óà¶î
+    // æŸ¥è¯¢ ETH ä½™é¢
     function getETHBalance() external view returns (uint256) {
         return userETHBalances[msg.sender];
     }
 
-    // ºÏÔ¼½ÓÊÕ ETH
+    // åˆçº¦æ¥æ”¶ ETH
     receive() external payable {}
 }

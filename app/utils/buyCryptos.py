@@ -13,8 +13,8 @@ class BuyCryptos:
         :param amount: 交易数量
         """
         self.trade_type = trade_type
-        self.input_token = input_token
-        self.output_token = output_token
+        self.input_token = Web3.to_checksum_address(input_token) if input_token else None
+        self.output_token = Web3.to_checksum_address(output_token) if output_token else None
         self.amount = amount
 
         # 初始化 Web3
@@ -132,7 +132,12 @@ class BuyCryptos:
             amount_in = self.w3.to_wei(self.amount, 'ether')
             deadline = int(time.time()) + 600  # 10分钟后过期
             nonce = self.w3.eth.get_transaction_count(self.account.address)
-            path = [self.input_token, self.output_token]
+            
+            # 根据交易类型设置路径
+            if self.trade_type == "ETH_TO_TOKEN":
+                path = [self.WBNB, self.output_token]
+            else:
+                path = [self.input_token, self.output_token]
 
             # 根据交易类型执行不同的交易
             if self.trade_type == "ETH_TO_TOKEN":
@@ -147,7 +152,7 @@ class BuyCryptos:
                     deadline
                 ).build_transaction({
                     'from': self.account.address,
-                    'value': amount_in,
+                    'value': amount_in,  # 需要发送 ETH 给合约，合约再转发给 PancakeRouter
                     'gas': 200000,
                     'gasPrice': self.w3.eth.gas_price,
                     'nonce': nonce,

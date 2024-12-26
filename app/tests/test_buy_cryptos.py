@@ -15,16 +15,19 @@ def test_1_bnb_to_token():
     trade = BuyCryptos(
         trade_type="ETH_TO_TOKEN",
         input_token="0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",  # WBNB
-        output_token="0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee",  # BUSD
+        output_token="0x0841e381a6363e6e7fbd742407b5749fc5e73083",  # BUSD
         amount=0.001  # BNB
     )
     
-    # 打印交易参数
-    print(f"交易类型: {trade.trade_type}")
-    print(f"输入代币: {trade.input_token}")
-    print(f"输出代币: {trade.output_token}")
-    print(f"数量: {trade.amount} BNB")
+    # 检查余额
+    trade.check_balances()
     
+    # 先存入 ETH
+    result = trade.deposit_eth(0.001)
+    if not result:
+        print("存入 ETH 失败")
+        return
+        
     # 执行交易
     result = trade.execute_trade()
     print(f"交易结果: {result}")
@@ -90,5 +93,5 @@ def test_token_to_token():
 if __name__ == "__main__":
     print("开始测试智能合约交互...\n")
     test_1_bnb_to_token()
-    test_2_token_to_bnb()
-    test_3_get_token_balance()
+    #test_2_token_to_bnb()
+    #test_3_get_token_balance()
