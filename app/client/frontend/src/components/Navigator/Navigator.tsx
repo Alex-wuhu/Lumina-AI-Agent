@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./navigator.module.css";
 import { Routes, Route, Link } from "react-router-dom";
 import { BrowserProvider } from "ethers";
@@ -6,6 +6,17 @@ import { BrowserProvider } from "ethers";
 function Navigator() {
   const [walletConnected, setWalletConnected] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
+
+  // 加载时检查钱包连接状态
+  useEffect(() => {
+    const savedWalletConnected = localStorage.getItem("walletConnected");
+    const savedUserAddress = localStorage.getItem("userAddress");
+
+    if (savedWalletConnected === "true" && savedUserAddress) {
+      setWalletConnected(true);
+      setUserAddress(savedUserAddress);
+    }
+  }, []);
 
   // 连接钱包函数
   const connectWallet = async () => {
@@ -15,7 +26,6 @@ function Navigator() {
     }
 
     try {
-      // 创建 BrowserProvider 实例
       const provider = new BrowserProvider(window.ethereum);
 
       // 请求用户连接钱包
@@ -28,19 +38,38 @@ function Navigator() {
 
       setUserAddress(address);
       setWalletConnected(true);
+
+      // 保存状态到 localStorage
+      localStorage.setItem("walletConnected", "true");
+      localStorage.setItem("userAddress", address);
+
       console.log("Signer address:", address);
     } catch (error) {
       console.error("Failed to connect wallet:", error);
       alert("Failed to connect wallet!");
     }
   };
+ // 断开钱包函数
+ const disconnectWallet = () => {
+  setWalletConnected(false);
+  setUserAddress(null);
 
+  // 清除 localStorage 中的状态
+  localStorage.removeItem("walletConnected");
+  localStorage.removeItem("userAddress");
+
+  console.log("Wallet disconnected.");
+};
   return (
     <>
       <div className={styles.father}>
         <div className={styles.logo}>
           <Link to="/">
-            <img src="../../../img/logo.jpg" alt="Logo" className={styles.logo_image} />
+            <img
+              src="../../../img/logo.jpg"
+              alt="Logo"
+              className={styles.logo_image}
+            />
           </Link>
         </div>
         <div className={styles.DAO_name}>
@@ -48,17 +77,36 @@ function Navigator() {
             Lumina DAO
           </Link>
         </div>
-        <div className={styles.home}>
-          <Link to="/" className={styles.home_link}>Home</Link>
+        <div className={styles.market}>
+          <Link to="/market" className={styles.market_link}>
+            Market
+          </Link>
+        </div>
+        <div className={styles.deploy}>
+          <Link to="/deploy" className={styles.deploy_link}>
+            Deploy
+          </Link>
         </div>
         <div className={styles.user}>
-          <Link to="/user" className={styles.user_link}>User</Link>
+          <Link to="/user" className={styles.user_link}>
+            User
+          </Link>
         </div>
         <div className={styles.connect_wallet_button}>
           {!walletConnected ? (
-            <div onClick={connectWallet}>Connect Wallet</div>
+            <div
+              onClick={connectWallet}
+              className={styles.connect_wallet_button}
+            >
+              Connect Wallet
+            </div>
           ) : (
-            <span>Connected: {userAddress?.slice(0, 6)}...{userAddress?.slice(-4)}</span>
+            <div className={styles.connected_state} onClick={disconnectWallet}>
+              Connected
+              <span className={styles.user_address}>
+                ({userAddress?.slice(0, 6)}...{userAddress?.slice(-4)})
+              </span>
+            </div>
           )}
         </div>
       </div>

@@ -4,7 +4,7 @@
     width: 98vw;
     height: 10vh;
     padding: 0 1vw;
-    background-color: rgba(31, 32, 32, 100);
+    background-color: rgba(31, 32, 32, 0.5);
     color: whitesmoke;
   }
   .logo {
@@ -13,10 +13,17 @@
     color: white;
     min-width: 5vw;
   }
-  .home {
+  .deploy {
     display: flex;
     align-items: center;
-    margin-left: 55vw;
+    margin-left: 5vw;
+    color: white;
+    min-width: 5vw
+  }
+  .market {
+    display: flex;
+    align-items: center;
+    margin-left: 40vw;
     color: white;
     min-width: 5vw
   }
@@ -27,15 +34,12 @@
     color: white;
     min-width: 5vw
   }
-  .connect_wallet_button {
-    display: flex;
-    align-items: center;
-    margin-left: 5vw;
+  .deploy_link{
     color: white;
     text-decoration: none;
-    min-width: 5vw
+    font-size: large;
   }
-  .home_link{
+  .market_link{
     color: white;
     text-decoration: none;
     font-size: large;
@@ -47,15 +51,47 @@
   }
   .DAO_name{
     margin-left: 0.5vw;
-    min-width: 5vw
+    min-width: 10vw
   }
 .DAO_name_link{
     color: white;
     text-decoration: none;
-    font-size: large;
+    font-size: 22px;
 }
   .logo_image {
-    width: 4vw; /* 设置图片宽度 */
-    height: auto; /* 保持图片比例 */
+    width: 4vw;
+    height: auto; 
     border-radius: 100%;
   }
+
+  .connect_wallet_button {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    min-width: 10vw;
+    margin-left: 1vw;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color:rgb(31, 32, 32.0.5);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .connected_state {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: rgba(86, 86, 86, 0.5); 
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: default; /* ???? */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); 
+  }
+  

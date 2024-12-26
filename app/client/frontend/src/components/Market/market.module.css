@@ -1,0 +1,29 @@
+.home{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(60, 60, 60, 1);
+}
+.content{
+    margin-top: 3vw;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: start;
+    padding: 0 0 0 8vw;
+    gap: 2vw;
+}
+.card{
+    background: rgba(255, 255, 255, 0.281); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* Apply the blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    border-radius: 8px; /* Optional: Rounded corners for the frosted glass effect */
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow to enhance the frosted effect */
+    transition: backdrop-filter 0.3s ease; /* Smooth transition when hovering */
+}
+
+.card:hover {
+    backdrop-filter: blur(20px); /* Increase blur on hover */
+    -webkit-backdrop-filter: blur(20px); /* Safari support */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Optional: Shadow effect on hover */
+  }

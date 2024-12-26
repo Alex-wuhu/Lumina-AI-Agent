@@ -1,0 +1,21 @@
+.footer{
+    display: flex;
+    min-height: 20vh;
+    width: 100%;
+    flex-direction: column-reverse;
+}
+
+.content{
+    display: flex;
+    width: 100%;
+    height: 4vh;
+    background-color: rgba(31, 32, 32, 0.5);
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+}
+
+.t{
+    color: whitesmoke;
+    text-align: center;
+}

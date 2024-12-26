@@ -1,8 +1,14 @@
 /* deposit.module.css */
+
+
 .depositPage {
     display: flex;
     flex-direction: column;
-    background-color: rgba(60, 60, 60, 100);
+    /* background-color: rgba(60, 60, 60, 100); */
+    background: #ebbd92;
+    background: linear-gradient(90deg, #3f3f3f 0,#6c6262 58%);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
 }
 
 .content {
@@ -13,21 +19,23 @@
     justify-content: center;
     padding: 0 6vw;
     gap: 2vw;
-    min-height: 90vh;
-
+    height: 91vh;
 }
 
+
 .card {
-    background-color: rgb(31, 32, 32);
+    display: flex;
+    background-color: rgb(34, 34, 34, 0.9);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     min-width: 50vw;
-    min-height: 60vh;
-    
+    height: 60vh; 
+    flex-direction: column;
+    align-items: center;
 }
 
-/* 代币质押部分的样式 */
+
 .title {
     text-align: center;
     font-size: 24px;
@@ -37,10 +45,10 @@
 }
 
 .tokenInfo {
-    margin-bottom: 20px;
     font-size: 16px;
     text-align: center;
     color: whitesmoke;
+    margin-left: 10vw;
 }
 
 .stakeSection {
@@ -49,49 +57,7 @@
     align-items: center;
 }
 
-.stakeInput {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-align: center;
-    background-color: #f9f9f9;
-}
 
-.stakeButtons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.stakeButton, .unstakeButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.stakeButton {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.stakeButton:hover {
-    background-color: #45a049;
-}
-
-.unstakeButton {
-    background-color: #f44336;
-    color: white;
-}
-
-.unstakeButton:hover {
-    background-color: #e53935;
-}
 
 .status {
     margin-top: 20px;
@@ -106,4 +72,56 @@
     min-height: 60vh;
     justify-content: center;
     align-items: center;
+}
+
+.stake_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 5vh;
+    border: 1px solid rgba(173, 173, 173, 0.1);
+    border-radius: 1%;
+    min-height: 20vh;
+    min-width: 45vw;
+    overflow-y: auto; /* 让 .stake_content 在内容溢出时显示滚动条 */
+}
+
+.stake_button {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 5vh;
+    width: 100%;
+}
+
+
+.customButton {
+    flex: 1;
+    font-size: 20px; 
+    padding: 15px 30px; /* 增大按钮的内边距 */
+    border: none; /* 去掉默认边框 */
+    color: rgba(255, 255, 255, 0.811); /* 设置字体颜色为白色 */
+    border-radius: 5px; /* 设置按钮圆角 */
+    max-width: 15vw;
+    height: 5vh;
+    text-align: center; /* 确保文本水平居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* 鼠标悬浮时显示指针 */
+    transition: all 0.3s ease; /* 添加过渡效果 */
+    background: rgba(32, 32, 32, 0.8); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* Apply the blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    border-radius: 8px; /* Optional: Rounded corners for the frosted glass effect */
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow to enhance the frosted effect */
+    transition: backdrop-filter 0.3s ease; /* Smooth transition when hovering */
+  }
+
+  
+.customButton:hover{
+    color: white;
+    backdrop-filter: blur(20px); /* Increase blur on hover */
+    -webkit-backdrop-filter: blur(20px); /* Safari support */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Optional: Shadow effect on hover */
 }

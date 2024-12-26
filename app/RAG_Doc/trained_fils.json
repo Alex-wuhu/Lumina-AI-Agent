@@ -1,12 +1,8 @@
 {
     "Files":[
         {
-            "name":"BITCOIN_PRICE_PREDICTION_USING_MACHINE_LEARNING",
-            "path":"\\BITCOIN_PRICE_PREDICTION_USING_MACHINE_LEARNING.pdf"
-        },
-        {
-            "name":"Bitcoin_Price_Prediction_Using_Sentiment_Analysis",
-            "path":"\\Bitcoin_Price_Prediction_Using_Sentiment_Analysis.pdf"
+            "name":"RSI",
+            "path":"\\RSI.md"
         },
         {
             "name":"Deciphering the Blockchain",
@@ -15,6 +11,11 @@
         {
             "name":"Quantitative analysis of Crypto",
             "path":"\\Quantitative analysis of Crypto.pdf"
+        },
+        {
+            "name":"Crypto Moving Averages",
+            "path":"\\Crypto Moving Averages.md"
         }
+
     ]
 }
