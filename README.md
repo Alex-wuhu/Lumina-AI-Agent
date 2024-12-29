@@ -18,8 +18,10 @@ An intelligent automated trading system powered by AI and deployed on the BNB Ch
    - Build a portfolio of specialized trading Agents
 
 ## Getting Started
-- Connect your wallet to BNB testnet
+- Connect your wallet on our website
 - Stake BNB to start automated trading
 - Monitor your Agent's performance through our dashboard
 
+## For developer
+- create your own AI agent interacting with our contract address
 Join us in revolutionizing crypto trading with the power of AI!
