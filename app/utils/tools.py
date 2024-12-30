@@ -1,5 +1,7 @@
-from app.services.Chroma_service import get_chroma_vector_store,local_Rag
+from app.services.Chroma_service import get_chroma_vector_store
 from langchain.tools import tool
+from app.utils.quantitative import query_eth_indicators
+
 
 from app.utils.buyCryptos import BuyCryptos
 
@@ -38,12 +40,32 @@ def GetEthIndicators() -> dict:
     return indicators
 
 @tool
-def buyCryptos(trade_type: str, input_token: str, output_token: str, amount: float) -> str:
+def BuyCryptos(trade_type: str, input_token: str, output_token: str, amount: float) -> str:
+    """
+    tools for buy and sell Cryptos
+    trade_type : ETH_TO_TOKEN  or TOKEN_TO_ETH , for Buying ETH use TOKEN_TO_ETH , for selling ETH use ETH_TO_TOKEN
+    input_token : ETH or BNB
+    output_token: ETH or BNB
+    amount : specifi amount 
+    """
+    print(f"{trade_type} {input_token} {output_token} accept")
+    return f"{amount} done sucess"
 
+
+
+@tool
+def buyCryptos(trade_type: str, input_token: str, output_token: str, amount: float) -> str:
+    """
+    tools for buy and sell Cryptos
+    trade_type : ETH_TO_TOKEN  or TOKEN_TO_ETH , for Buying ETH use TOKEN_TO_ETH , for selling ETH use ETH_TO_TOKEN
+    input_token : ETH or BNB
+    output_token: ETH or BNB
+    amount : specifi amount 
+    """
     if input_token == "ETH":
         input = "0xeD24FC36d5Ee211Ea25A80239Fb84Cfd80f12Ee"
     if input_token == "BNB":
-        input = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+        input = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"  
     if output_token == "ETH":
         output = "0xeD24FC36d5Ee211Ea25A80239Fb84Cfd80f12Ee"
     if output_token == "BNB":
@@ -58,6 +80,6 @@ def buyCryptos(trade_type: str, input_token: str, output_token: str, amount: flo
 
     # 执行交易
     result = trade.execute_trade()
-    print(f"交易结果: {result}")
+    print(f"Trading result: {result}")
     print(f"{trade_type} {input_token} {output_token} accept")
     return f"{amount} done sucess"

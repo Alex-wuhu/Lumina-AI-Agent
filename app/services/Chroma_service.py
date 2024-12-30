@@ -27,11 +27,12 @@ def local_Rag():
            print(i)
            print("trained resouce : "+i["name"])
            print("path : "+RAG_PATH+i["path"])
-           if("md" in i):
-            cur_doc = Markdown_hander(RAG_PATH+i["path"])
+           if "md" in i["path"]:
+                cur_doc = Markdown_hander(RAG_PATH+i["path"])
            else:
-            cur_doc = Pdf_handler(RAG_PATH+i["path"])
+                cur_doc = Pdf_handler(RAG_PATH+i["path"])
            embed_chunks_and_upload_to_Chroma(cur_doc)
+           break
    print("train finished")        
    
 
