@@ -25,7 +25,7 @@ class BuyCryptos:
         self.WBNB = Web3.to_checksum_address("0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd")
 
         # 加载合约 ABI
-        with open("app/abis/agent_abi.json", "r") as f:
+        with open("/Users/k/PycharmProjects/Lumina-AI-Agent/app/abis/agent_abi.json", "r") as f:
             self.agent_abi = json.load(f)
 
         # 创建合约实例
@@ -98,8 +98,8 @@ class BuyCryptos:
                 amount_in_wei
             ).build_transaction({
                 'from': self.account.address,
-                'gas': 100000,
-                'gasPrice': self.w3.eth.gas_price,
+                'gas': 50000,  # 降低gas限制
+                'gasPrice': Web3.to_wei(1, 'gwei'),  # 设置较低的固定gas价格
                 'nonce': nonce,
                 'chainId': 97
             })
@@ -153,8 +153,8 @@ class BuyCryptos:
                 ).build_transaction({
                     'from': self.account.address,
                     'value': amount_in,  # 需要发送 ETH 给合约，合约再转发给 PancakeRouter
-                    'gas': 200000,
-                    'gasPrice': self.w3.eth.gas_price,
+                    'gas': 150000,  # 降低gas限制
+                    'gasPrice': Web3.to_wei(1, 'gwei'),  # 设置较低的固定gas价格
                     'nonce': nonce,
                     'chainId': 97
                 })
@@ -173,8 +173,8 @@ class BuyCryptos:
                 ).build_transaction({
                     'from': self.account.address,
                     'value': 0,
-                    'gas': 200000,
-                    'gasPrice': self.w3.eth.gas_price,
+                    'gas': 150000,  # 降低gas限制
+                    'gasPrice': Web3.to_wei(1, 'gwei'),  # 设置较低的固定gas价格
                     'nonce': nonce,
                     'chainId': 97
                 })
@@ -193,8 +193,8 @@ class BuyCryptos:
                 ).build_transaction({
                     'from': self.account.address,
                     'value': 0,
-                    'gas': 200000,
-                    'gasPrice': self.w3.eth.gas_price,
+                    'gas': 150000,  # 降低gas限制
+                    'gasPrice': Web3.to_wei(1, 'gwei'),  # 设置较低的固定gas价格
                     'nonce': nonce,
                     'chainId': 97
                 })
@@ -278,8 +278,8 @@ class BuyCryptos:
                 amount_in_wei
             ).build_transaction({
                 'from': self.account.address,
-                'gas': 100000,
-                'gasPrice': self.w3.eth.gas_price,
+                'gas': 50000,  # 降低gas限制
+                'gasPrice': Web3.to_wei(1, 'gwei'),  # 设置较低的固定gas价格
                 'nonce': nonce,
                 'chainId': 97
             })
