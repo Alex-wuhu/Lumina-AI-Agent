@@ -1,11 +1,10 @@
 import sys
 import os
 from web3 import Web3
+import json
 
 # 添加项目根目录到 Python 路径
-current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.dirname(os.path.dirname(current_dir))
-sys.path.append(project_root)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.utils.buyCryptos import BuyCryptos
 
@@ -97,27 +96,40 @@ def test_tbnb_to_wbnb():
     print("\n=== 测试用tBNB兑换wBNB ===")
     
     # 创建交易实例
+    amount = 0.01  # 兑换0.01个代币
+    amount_wei = Web3.to_wei(amount, 'ether')
+    wbnb_address = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+    
     trade = BuyCryptos(
         trade_type="ETH_TO_TOKEN",
-        input_token=None,  # ETH_TO_TOKEN类型不需要input_token，因为输入就是原生代币tBNB
-        output_token="0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",  # WBNB地址
-        amount=0.00000001  # 兑换的tBNB数量
+        input_token=None,  # ETH_TO_TOKEN类型不需要input_token
+        output_token=wbnb_address,
+        amount=amount
     )
     
     # 检查余额
     trade.check_balances()
     
-    # 存入tBNB (作为原生代币)
-    result = trade.deposit_eth(0.01)
-    if not result:
-        print("存入 tBNB 失败")
-        return
-        
+    # 先存入ETH到合约
+    result = trade.deposit_eth(amount)
+    print(f"存款结果: {result}")
+    trade.check_balances()
+    
     # 执行兑换
     result = trade.execute_trade()
     print(f"兑换结果: {result}")
+    trade.check_balances()
     
-    # 再次检查余额
+    # 检查WBNB合约的余额
+    with open("/Users/k/PycharmProjects/Lumina-AI-Agent/app/abis/erc20_abi.json", "r") as f:
+        erc20_abi = json.load(f)
+    wbnb_contract = trade.w3.eth.contract(address=wbnb_address, abi=erc20_abi)
+    wbnb_balance = wbnb_contract.functions.balanceOf(trade.account.address).call()
+    print(f"\nWBNB合约中的余额: {wbnb_balance / 10**18} WBNB")
+    
+    # 把WBNB存入合约
+    print("\n把WBNB存入合约...")
+    trade.deposit_token(wbnb_address, amount_wei)
     trade.check_balances()
 
 def test_eth_to_wbnb():
@@ -148,26 +160,63 @@ def test_eth_to_wbnb():
     # 再次检查余额
     trade.check_balances()
 
-def test_wbnb_to_eth():
-    """测试用wBNB换回ETH"""
-    print("\n=== 测试用wBNB换回ETH ===")
-    
-    wbnb_address = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"  # WBNB地址
-    amount = 0.01  # 兑换的wBNB数量
+def test_deposit_wbnb():
+    """测试存入WBNB到合约"""
+    print("\n=== 测试存入WBNB到合约 ===")
     
     # 创建交易实例
+    amount = 0.01  # 存入0.01个代币
+    wbnb_address = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+    
     trade = BuyCryptos(
-        trade_type="TOKEN_TO_ETH",
+        trade_type="TOKEN_TO_ETH",  # 这里的trade_type不重要，因为我们只是用来存款
         input_token=wbnb_address,
-        output_token=None,  # TOKEN_TO_ETH类型不需要output_token
+        output_token=None,
         amount=amount
     )
     
     # 检查余额
     trade.check_balances()
     
-    # 授权合约使用wBNB
-    amount_wei = Web3.to_wei(amount, 'ether')  # 转换为wei
+    # 存入WBNB到合约
+    print("\n把WBNB存入合约...")
+    result = trade.deposit_token(wbnb_address, amount)  # 直接使用amount，不转换为wei
+    if result:
+        print("WBNB存入成功")
+    else:
+        print("WBNB存入失败")
+    
+    # 再次检查余额
+    trade.check_balances()
+
+def test_wbnb_to_eth():
+    """测试用wBNB换回ETH"""
+    print("\n=== 测试用wBNB换回ETH ===")
+    
+    # 先运行test_tbnb_to_wbnb来获取WBNB
+    #test_tbnb_to_wbnb()
+    
+    # 创建交易实例
+    amount = 0.01  # 兑换0.01个代币
+    amount_wei = Web3.to_wei(amount, 'ether')
+    wbnb_address = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+    
+    trade = BuyCryptos(
+        trade_type="TOKEN_TO_ETH",
+        input_token=wbnb_address,
+        output_token=None,  # TOKEN_TO_ETH 不需要output_token
+        amount=amount
+    )
+    
+    # 检查余额
+    trade.check_balances()
+    
+    # 先从合约中提取WBNB
+    #print("\n提取WBNB从合约到账户...")
+    #trade.withdraw_token(wbnb_address, amount_wei)
+    #trade.check_balances()
+    
+    # 授权代币
     trade.approve_token(wbnb_address, amount_wei)
     
     # 执行兑换
@@ -179,6 +228,7 @@ def test_wbnb_to_eth():
 
 if __name__ == "__main__":
     print("开始测试智能合约交互...\n")
-    test_tbnb_to_wbnb()
+    #test_tbnb_to_wbnb()
     #test_eth_to_wbnb()
-    #test_wbnb_to_eth()
+    #test_deposit_wbnb()
+    test_wbnb_to_eth()
